@@ -22,6 +22,8 @@ ekosee/
 │   └── icons/
 ├── chrome/             # Chrome install notes
 ├── mac/                # Mac/Safari convert script + install notes
+├── screenshots/        # Mac (4) + PC (4) product screenshots + API health snapshot
+├── scripts/            # Local API + screenshot capture helpers
 ├── landing/            # React + Vite landing (Chrome & Mac downloads)
 │   └── src/
 └── server/

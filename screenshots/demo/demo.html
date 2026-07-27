@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ekosee demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: #c8d0da;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  .desktop {
+    width: 1120px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
+    background: #0b1220;
+  }
+  .menubar {
+    height: 28px;
+    background: linear-gradient(180deg, #ececec, #d8d8d8);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 14px;
+    color: #222;
+    font-size: 12px;
+  }
+  .menubar.hidden { display: none; }
+  .menubar .apple { font-weight: 700; }
+  .menubar .app { font-weight: 600; }
+  .titlebar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .titlebar.safari { background: #2a2a2c; }
+  .titlebar.chrome { background: #202124; }
+  .traffic { display: flex; gap: 7px; }
+  .traffic span { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .traffic .r { background: #ff5f57; }
+  .traffic .y { background: #febc2e; }
+  .traffic .g { background: #28c840; }
+  .win-controls {
+    display: none;
+    margin-left: auto;
+    gap: 2px;
+    align-items: center;
+  }
+  .win-controls span {
+    width: 46px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: #e8eaed; font-size: 12px;
+  }
+  body.pc {
+    background: #1a2332;
+  }
+  body.pc .desktop { border-radius: 8px; }
+  body.pc .traffic { display: none; }
+  body.pc .win-controls { display: flex; }
+  body.pc .titlebar {
+    height: 48px;
+    flex-wrap: wrap;
+    padding-top: 6px;
+    align-content: center;
+  }
+  body.pc .tabs { order: 1; width: 100%; }
+  body.pc .omnibox { order: 2; max-width: 720px; }
+  .tabs { display: flex; gap: 6px; flex: 1; min-width: 0; }
+  .tab {
+    background: rgba(255,255,255,0.08);
+    color: #e5e7eb;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 8px 8px 0 0;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .omnibox {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    color: #cbd5e1;
+    font-size: 12px;
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .omnibox .lock { opacity: 0.7; }
+  .content {
+    position: relative;
+    background: #f8fafc;
+    min-height: 640px;
+    color: #0f172a;
+  }
+  .article {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 40px 120px;
+  }
+  .kicker {
+    color: #b45309;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 40px;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 18px;
+  }
+  .meta { color: #64748b; font-size: 14px; margin-bottom: 28px; }
+  p { font-size: 18px; line-height: 1.65; color: #334155; margin-bottom: 18px; }
+  .landing {
+    background: #060D1B;
+    color: #fff;
+    min-height: 640px;
+    padding: 40px 56px 56px;
+  }
+  .landing-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 72px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 18px;
+    background: linear-gradient(135deg,#10B981,#6366F1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .brand-mark {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: linear-gradient(135deg,#C19A6B,#8B6914);
+    -webkit-text-fill-color: initial;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(16,185,129,0.25);
+    background: rgba(16,185,129,0.08);
+    color: #10B981;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 22px;
+  }
+  .landing h1 {
+    font-size: 52px;
+    color: #fff;
+    max-width: 760px;
+  }
+  .landing .sub {
+    color: #94a3b8;
+    font-size: 18px;
+    max-width: 520px;
+    margin: 18px 0 28px;
+    line-height: 1.6;
+  }
+  .cta-row { display: flex; gap: 12px; }
+  .cta {
+    border: none;
+    border-radius: 12px;
+    padding: 14px 22px;
+    font-weight: 800;
+    color: #fff;
+    font-size: 15px;
+  }
+  .cta.green { background: linear-gradient(135deg,#10B981,#059669); }
+  .cta.gray { background: linear-gradient(135deg,#64748B,#334155); }
+  .pill {
+    position: absolute;
+    right: 28px;
+    bottom: 28px;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: #C19A6B;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    border: none;
+  }
+  .pill.translated {
+    background: #7B8F6A;
+    padding-right: 8px;
+  }
+  .pill .restore {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin-left: 4px;
+  }
+  .panel {
+    position: absolute;
+    right: 28px;
+    bottom: 86px;
+    width: 240px;
+    background: #1C1C1E;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 16px;
+    color: #fff;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+  }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; font-weight: 700; margin-bottom: 12px;
+  }
+  .panel-label {
+    font-size: 11px; color: rgba(255,255,255,0.4);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+  .select {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  .translate-btn {
+    width: 100%;
+    background: #C19A6B;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 800;
+    padding: 10px;
+    font-size: 13px;
+  }
+  .chrome-extensions {
+    background: #202124;
+    color: #e8eaed;
+    min-height: 640px;
+    padding: 28px 36px;
+  }
+  .chrome-extensions h2 { font-size: 22px; margin-bottom: 8px; }
+  .chrome-extensions .hint { color: #9aa0a6; margin-bottom: 22px; font-size: 14px; }
+  .ext-card {
+    background: #292a2d;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    max-width: 640px;
+  }
+  .ext-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    background: linear-gradient(135deg,#C19A6B,#8B6914);
+  }
+  .ext-card h3 { font-size: 16px; margin-bottom: 4px; }
+  .ext-card p { color: #9aa0a6; font-size: 13px; margin: 0; }
+  .toggle {
+    margin-left: auto;
+    width: 40px; height: 22px; border-radius: 999px;
+    background: #10B981; position: relative;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute; right: 3px; top: 3px;
+    width: 16px; height: 16px; border-radius: 50%; background: #fff;
+  }
+  .safari-prefs {
+    background: #1c1c1e;
+    color: #f5f5f7;
+    min-height: 640px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+  }
+  .sidebar {
+    background: #2c2c2e;
+    padding: 24px 16px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar .item {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #a1a1a6;
+    margin-bottom: 4px;
+  }
+  .sidebar .item.active { background: #0a84ff; color: #fff; font-weight: 600; }
+  .prefs-main { padding: 28px 32px; }
+  .prefs-main h2 { font-size: 22px; margin-bottom: 18px; }
+  .ext-row {
+    display: flex; align-items: center; gap: 14px;
+    background: #2c2c2e; border-radius: 12px; padding: 16px;
+    max-width: 560px;
+  }
+  .label-tag {
+    position: absolute;
+    left: 20px; top: 20px;
+    background: rgba(15,23,42,0.85);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+</style>
+</head>
+<body>
+  <div class="desktop" id="frame">
+    <div class="menubar" id="menubar">
+      <span class="apple"></span>
+      <span class="app">Safari</span>
+      <span>File</span><span>Edit</span><span>View</span><span>History</span><span>Bookmarks</span><span>Develop</span><span>Window</span><span>Help</span>
+    </div>
+    <div class="titlebar" id="titlebar">
+      <div class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+      <div class="tabs" id="tabs"></div>
+      <div class="omnibox" id="omnibox"><span class="lock">🔒</span><span id="url"></span></div>
+      <div class="win-controls" aria-hidden="true"><span>─</span><span>□</span><span>×</span></div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const platform = params.get("platform") || "mac"; // mac | pc
+  const scene = params.get("scene") || "landing";
+
+  const menubar = document.getElementById("menubar");
+  const titlebar = document.getElementById("titlebar");
+  const content = document.getElementById("content");
+  const urlEl = document.getElementById("url");
+  const tabs = document.getElementById("tabs");
+
+  if (platform === "mac") {
+    document.body.classList.remove("pc");
+    menubar.classList.remove("hidden");
+    titlebar.classList.add("safari");
+    titlebar.classList.remove("chrome");
+  } else {
+    document.body.classList.add("pc");
+    menubar.classList.add("hidden");
+    titlebar.classList.add("chrome");
+    titlebar.classList.remove("safari");
+  }
+
+  const scenes = {
+    landing: {
+      url: platform === "mac" ? "ekosee.app/#install" : "ekosee.app",
+      tab: "Ekosee — Translate any page",
+      html: `
+        <div class="landing">
+          <div class="landing-nav">
+            <div class="brand"><div class="brand-mark"></div>Ekosee</div>
+            <div style="color:#94a3b8;font-size:14px;font-weight:600">Features · Install</div>
+          </div>
+          <div class="badge"><span style="width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block"></span>
+            Chrome · Mac Safari · Google Translate · No API Key
+          </div>
+          <h1>Read any page in your language</h1>
+          <p class="sub">Ekosee translates entire web pages with one click using Google Translate — no account or API key required.</p>
+          <div class="cta-row">
+            <button class="cta green">${platform === "mac" ? "Download for Mac" : "Download for Chrome"}</button>
+            <button class="cta gray">${platform === "mac" ? "Download for Chrome" : "Download for Mac"}</button>
+          </div>
+        </div>`
+    },
+    install: {
+      url: platform === "mac" ? "safari-settings://extensions" : "chrome://extensions",
+      tab: platform === "mac" ? "Safari Settings — Extensions" : "Extensions",
+      html: platform === "mac" ? `
+        <div class="safari-prefs">
+          <div class="sidebar">
+            <div class="item">General</div>
+            <div class="item">Tabs</div>
+            <div class="item">AutoFill</div>
+            <div class="item active">Extensions</div>
+            <div class="item">Privacy</div>
+          </div>
+          <div class="prefs-main">
+            <h2>Extensions</h2>
+            <div class="ext-row">
+              <div class="ext-icon"></div>
+              <div>
+                <h3 style="margin:0 0 4px;font-size:16px">Ekosee</h3>
+                <p style="margin:0;color:#a1a1a6;font-size:13px">Translate any web page · Google Translate · No API key</p>
+              </div>
+              <div class="toggle"></div>
+            </div>
+            <p style="margin-top:16px;color:#a1a1a6;font-size:13px">Allow on every website · Checked</p>
+          </div>
+        </div>` : `
+        <div class="chrome-extensions">
+          <h2>Extensions</h2>
+          <p class="hint">Developer mode on · Load unpacked → ekosee-chrome/extension</p>
+          <div class="ext-card">
+            <div class="ext-icon"></div>
+            <div>
+              <h3>Ekosee</h3>
+              <p>Translate any web page with Google Translate — one tap, no account or API key.</p>
+              <p style="margin-top:6px">ID: ekosee · Version 1.0.0</p>
+            </div>
+            <div class="toggle"></div>
+          </div>
+        </div>`
+    },
+    picker: {
+      url: "lemonde.fr/international",
+      tab: "International — Le Monde",
+      html: `
+        <div class="label-tag">${platform === "mac" ? "Mac · Safari" : "PC · Chrome"}</div>
+        <div class="article">
+          <div class="kicker">International</div>
+          <h1>Les dirigeants européens se réunissent à Bruxelles</h1>
+          <div class="meta">Le Monde · Il y a 2 heures</div>
+          <p>Les chefs d'État et de gouvernement de l'Union européenne se retrouvent ce jeudi pour discuter de la sécurité et de l'énergie.</p>
+          <p>Plusieurs capitales espèrent un accord sur de nouvelles mesures de soutien, tandis que d'autres appellent à la prudence budgétaire.</p>
+          <p>À Bruxelles, les négociations devraient se prolonger jusqu'à la nuit.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><span>Translate page</span><span style="opacity:.5">✕</span></div>
+          <div class="panel-label">Translate to</div>
+          <div class="select">English ▾</div>
+          <button class="translate-btn">Translate</button>
+        </div>
+        <button class="pill"><span>🌐</span><span>Translate</span></button>`
+    },
+    translated: {
+      url: "lemonde.fr/international",
+      tab: "International — Le Monde",
+      html: `
+        <div class="label-tag">${platform === "mac" ? "Mac · Safari" : "PC · Chrome"}</div>
+        <div class="article">
+          <div class="kicker">International</div>
+          <h1>European leaders meet in Brussels</h1>
+          <div class="meta">Le Monde · 2 hours ago</div>
+          <p>The heads of state and government of the European Union are meeting this Thursday to discuss security and energy.</p>
+          <p>Several capitals hope for an agreement on new support measures, while others call for fiscal caution.</p>
+          <p>In Brussels, negotiations are expected to continue into the night.</p>
+        </div>
+        <button class="pill translated"><span>✓ English</span><span class="restore">↺</span></button>`
+    }
+  };
+
+  const s = scenes[scene] || scenes.landing;
+  urlEl.textContent = s.url;
+  tabs.innerHTML = `<div class="tab">${s.tab}</div>`;
+  content.innerHTML = s.html;
+</script>
+</body>
+</html>
