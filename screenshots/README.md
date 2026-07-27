@@ -1,42 +1,34 @@
 # Ekosee screenshots
 
-Product screenshots for Mac (Safari) and PC (Chrome). Generated from `screenshots/demo/demo.html`.
-
-## API health
-
-Checked against local `GET /api/ekosee/health`:
-
-```json
-{"status":"ok","service":"ekosee","engine":"google-translate","timestamp":"2026-07-27T18:54:25.585Z"}
-```
+Product screenshots of Ekosee translating **foreign websites**, with the full site address visible in the browser bar.
 
 ## Mac (Safari) — 4
 
-| File | Scene |
-|------|--------|
-| `mac/mac-01-landing.png` | Landing / Download for Mac |
-| `mac/mac-02-safari-extensions.png` | Safari Extensions enabled |
-| `mac/mac-03-language-picker.png` | Translate pill + language picker |
-| `mac/mac-04-translated.png` | Page translated to English |
+| File | Site | Address shown |
+|------|------|----------------|
+| `mac/mac-01-lemonde-fr.png` | Le Monde (French) | `https://www.lemonde.fr/international/article/sommet-europeen-bruxelles` |
+| `mac/mac-02-asahi-jp.png` | Asahi Shimbun (Japanese) | `https://www.asahi.com/articles/economy-summit-tokyo-2026.html` |
+| `mac/mac-03-spiegel-de.png` | DER SPIEGEL (German) | `https://www.spiegel.de/politik/deutschland/bundestag-energiegesetz.html` |
+| `mac/mac-04-elpais-es.png` | El País (Spanish → English) | `https://elpais.com/internacional/cumbre-clima-madrid.html` |
 
 ## PC (Chrome) — 4
 
-| File | Scene |
-|------|--------|
-| `pc/pc-01-landing.png` | Landing / Download for Chrome |
-| `pc/pc-02-chrome-extensions.png` | chrome://extensions with Ekosee on |
-| `pc/pc-03-language-picker.png` | Translate pill + language picker |
-| `pc/pc-04-translated.png` | Page translated to English |
+| File | Site | Address shown |
+|------|------|----------------|
+| `pc/pc-01-corriere-it.png` | Corriere della Sera (Italian) | `https://www.corriere.it/esteri/vertice-ue-roma.shtml` |
+| `pc/pc-02-folha-pt.png` | Folha de S.Paulo (Portuguese) | `https://www1.folha.uol.com.br/mundo/cupula-amazonia-brasilia.shtml` |
+| `pc/pc-03-bbc-arabic.png` | BBC News Arabic | `https://www.bbc.com/arabic/articles/middle-east-summit-cairo` |
+| `pc/pc-04-chosun-ko.png` | Chosun Ilbo (Korean → English) | `https://www.chosun.com/international/asia/seoul-summit-2026/` |
+
+## API health
+
+See `api-health.json` (`GET /api/ekosee/health` → `status: "ok"`, `engine: "google-translate"`).
 
 ## Regenerate
 
 ```bash
-# terminal 1 — API (optional for health file)
-node scripts/dev-api.cjs
-
-# terminal 2 — demo pages
+npm install
 python3 -m http.server 8790 --directory screenshots/demo
-
-# terminal 3 — capture
+# other terminal:
 node scripts/capture-screenshots.mjs
 ```
