@@ -1,49 +1,16 @@
-# Ekosee — Browser Extension
+# Ekosee — shared extension source
 
-Translate any web page with Google Translate. **No API key. No account.**
+Shared WebExtension source used to build the separate **Chrome** and **Safari** packages.
 
-Works in **Chrome** (any OS) and **Safari on Mac**.
+Do not download this folder for end-user install. Use:
 
-## Install in Chrome
+| Platform | Download |
+|----------|----------|
+| Chrome | [`downloads/ekosee-chrome.zip`](../downloads/ekosee-chrome.zip) or [`chrome/`](../chrome/) |
+| Safari | [`downloads/ekosee-safari.zip`](../downloads/ekosee-safari.zip) or [`safari/`](../safari/) |
 
-1. Open `chrome://extensions`
-2. Enable **Developer mode** (top-right toggle)
-3. Click **Load unpacked**
-4. Select this `extension/` folder
-
-See also `chrome/README.md` in the repo root.
-
-## Install in Safari (macOS)
-
-Requires Xcode (free from the Mac App Store).
+Rebuild packages after editing this source:
 
 ```bash
-# from the repo root
-chmod +x mac/convert-for-safari.sh
-./mac/convert-for-safari.sh
+./scripts/package-extensions.sh
 ```
-
-Then Run in Xcode, and enable **Ekosee** under Safari → Settings → Extensions.
-
-Full steps: `mac/README.md`.
-
-## Setup
-
-None. There is no API key to paste. Optionally set a default language in the extension options (toolbar icon → Settings).
-
-## Usage
-
-1. Open any web page
-2. Click the **Translate** pill in the bottom-right corner
-3. Choose a language and tap **Translate**
-4. Tap restore on the pill to revert
-
-## Translation engine
-
-Ekosee calls Google Translate’s public web endpoint from the extension background worker. No Ekosee server and no Google Cloud API key are required.
-
-## Privacy
-
-- No account, no analytics
-- Page text is sent to Google Translate to produce translations
-- Default language preference is stored in `chrome.storage.sync` (browser-managed)

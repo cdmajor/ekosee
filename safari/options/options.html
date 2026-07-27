@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ekosee Settings</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <div class="logo">
+        <img src="../icons/icon48.png" alt="" class="logo-img" />
+        <div>
+          <h1 class="logo-name">Ekosee</h1>
+          <p class="logo-sub">Settings</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="card">
+        <h2 class="card-title">Default Language</h2>
+        <p class="card-desc">The language Ekosee will translate to by default when you open the popup.</p>
+
+        <div class="field">
+          <label class="label" for="defaultLang">Language</label>
+          <div class="select-wrap">
+            <select id="defaultLang" class="select">
+              <option value="English">English</option>
+              <option value="Spanish">Spanish</option>
+              <option value="French">French</option>
+              <option value="German">German</option>
+              <option value="Italian">Italian</option>
+              <option value="Portuguese">Portuguese</option>
+              <option value="Dutch">Dutch</option>
+              <option value="Russian">Russian</option>
+              <option value="Ukrainian">Ukrainian</option>
+              <option value="Polish">Polish</option>
+              <option value="Swedish">Swedish</option>
+              <option value="Norwegian">Norwegian</option>
+              <option value="Danish">Danish</option>
+              <option value="Finnish">Finnish</option>
+              <option value="Turkish">Turkish</option>
+              <option value="Arabic">Arabic</option>
+              <option value="Hebrew">Hebrew</option>
+              <option value="Persian">Persian</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Bengali">Bengali</option>
+              <option value="Urdu">Urdu</option>
+              <option value="Chinese (Simplified)">Chinese (Simplified)</option>
+              <option value="Chinese (Traditional)">Chinese (Traditional)</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Korean">Korean</option>
+              <option value="Vietnamese">Vietnamese</option>
+              <option value="Thai">Thai</option>
+              <option value="Indonesian">Indonesian</option>
+              <option value="Malay">Malay</option>
+              <option value="Tagalog">Tagalog</option>
+              <option value="Swahili">Swahili</option>
+              <option value="Yoruba">Yoruba</option>
+              <option value="Amharic">Amharic</option>
+              <option value="Greek">Greek</option>
+              <option value="Czech">Czech</option>
+              <option value="Slovak">Slovak</option>
+              <option value="Hungarian">Hungarian</option>
+              <option value="Romanian">Romanian</option>
+              <option value="Bulgarian">Bulgarian</option>
+              <option value="Croatian">Croatian</option>
+              <option value="Serbian">Serbian</option>
+              <option value="Catalan">Catalan</option>
+            </select>
+            <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <div class="save-row">
+        <button id="saveBtn" class="btn btn--primary">Save Settings</button>
+        <span id="saveResult" class="save-result hidden">✓ Saved</span>
+      </div>
+    </main>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

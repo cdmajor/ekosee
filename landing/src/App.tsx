@@ -2,7 +2,9 @@ import { useState } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
-const EXTENSION_FILES = [
+type Platform = "chrome" | "safari";
+
+const CHROME_FILES = [
   "manifest.json",
   "background.js",
   "content.js",
@@ -19,7 +21,7 @@ const EXTENSION_FILES = [
   "README.md",
 ];
 
-type Platform = "chrome" | "mac";
+const SAFARI_FILES = [...CHROME_FILES, "convert-for-safari.sh"];
 
 async function fetchText(url: string) {
   const res = await fetch(url);
@@ -33,64 +35,49 @@ async function fetchBlob(url: string) {
   return res.blob();
 }
 
+/** Prefer prebuilt zip from downloads/; fall back to packing chrome/ or safari/. */
 async function downloadExtension(platform: Platform) {
+  const prebuilt =
+    platform === "chrome"
+      ? `${window.location.origin}/ekosee/downloads/ekosee-chrome.zip`
+      : `${window.location.origin}/ekosee/downloads/ekosee-safari.zip`;
+
+  try {
+    const res = await fetch(prebuilt);
+    if (res.ok) {
+      const blob = await res.blob();
+      saveAs(blob, platform === "chrome" ? "ekosee-chrome.zip" : "ekosee-safari.zip");
+      return;
+    }
+  } catch {
+    // fall through to pack from source folders
+  }
+
   const zip = new JSZip();
-  const folderName = platform === "chrome" ? "ekosee-chrome" : "ekosee-mac";
+  const folderName = platform === "chrome" ? "ekosee-chrome" : "ekosee-safari";
   const folder = zip.folder(folderName)!;
-  const extFolder = folder.folder("extension")!;
-  const base = `${window.location.origin}/ekosee/extension/`;
+  const base =
+    platform === "chrome"
+      ? `${window.location.origin}/ekosee/chrome/`
+      : `${window.location.origin}/ekosee/safari/`;
+  const files = platform === "chrome" ? CHROME_FILES : SAFARI_FILES;
 
   await Promise.all(
-    EXTENSION_FILES.map(async (file) => {
-      if (file.endsWith(".js") || file.endsWith(".json") || file.endsWith(".html") || file.endsWith(".css") || file.endsWith(".md")) {
-        extFolder.file(file, await fetchText(base + file));
+    files.map(async (file) => {
+      if (
+        file.endsWith(".js") ||
+        file.endsWith(".json") ||
+        file.endsWith(".html") ||
+        file.endsWith(".css") ||
+        file.endsWith(".md") ||
+        file.endsWith(".sh")
+      ) {
+        folder.file(file, await fetchText(base + file));
       } else {
-        extFolder.file(file, await fetchBlob(base + file));
+        folder.file(file, await fetchBlob(base + file));
       }
     })
   );
-
-  if (platform === "chrome") {
-    folder.file(
-      "README.md",
-      await fetchText(`${window.location.origin}/ekosee/chrome/README.md`).catch(() =>
-        [
-          "# Ekosee for Chrome",
-          "",
-          "1. Open chrome://extensions",
-          "2. Enable Developer mode",
-          "3. Load unpacked → select the extension/ folder",
-          "",
-          "No API key required. Powered by Google Translate.",
-        ].join("\n")
-      )
-    );
-  } else {
-    const macBase = `${window.location.origin}/ekosee/mac/`;
-    folder.file(
-      "README.md",
-      await fetchText(`${macBase}README.md`).catch(() =>
-        [
-          "# Ekosee for Mac (Safari)",
-          "",
-          "Requires Xcode. Run ./convert-for-safari.sh then enable Ekosee in Safari → Settings → Extensions.",
-          "",
-          "No API key required. Powered by Google Translate.",
-        ].join("\n")
-      )
-    );
-    folder.file(
-      "convert-for-safari.sh",
-      await fetchText(`${macBase}convert-for-safari.sh`).catch(() =>
-        [
-          "#!/usr/bin/env bash",
-          "set -euo pipefail",
-          'ROOT="$(cd "$(dirname "$0")" && pwd)"',
-          'xcrun safari-web-extension-converter "$ROOT/extension" --app-name "Ekosee" --bundle-identifier "com.ekosee.safari" --macos-only --force',
-        ].join("\n")
-      )
-    );
-  }
 
   const content = await zip.generateAsync({ type: "blob" });
   saveAs(content, `${folderName}.zip`);
@@ -124,8 +111,8 @@ const FEATURES = [
   },
   {
     icon: "🍎",
-    title: "Chrome & Mac",
-    body: "Dedicated Chrome and Mac (Safari) packages — same translator, install path for each platform.",
+    title: "Chrome & Safari",
+    body: "Separate Chrome and Safari packages — download each zip on its own after publish.",
   },
 ];
 
@@ -133,13 +120,13 @@ const CHROME_STEPS = [
   { n: "1", text: "Download ekosee-chrome.zip and unzip it." },
   { n: "2", text: "Open Chrome and go to chrome://extensions" },
   { n: "3", text: "Enable Developer mode (top-right toggle)." },
-  { n: "4", text: "Click Load unpacked and select the extension folder inside ekosee-chrome." },
+  { n: "4", text: "Click Load unpacked and select the ekosee-chrome folder." },
   { n: "5", text: "Visit any page — look for the Translate pill in the bottom-right corner." },
 ];
 
 const SAFARI_STEPS = [
   { n: "1", text: "Install Xcode from the Mac App Store (free)." },
-  { n: "2", text: "Download ekosee-mac.zip and unzip it." },
+  { n: "2", text: "Download ekosee-safari.zip and unzip it on your Mac." },
   {
     n: "3",
     text: "In Terminal, run: chmod +x convert-for-safari.sh && ./convert-for-safari.sh",
@@ -252,7 +239,7 @@ export default function App() {
           }}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-teal-400 inline-block" />
-          Chrome · Mac Safari · Google Translate · No API Key
+          Chrome · Safari · Google Translate · No API Key
         </div>
 
         <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-[1.08] mb-6">
@@ -272,10 +259,10 @@ export default function App() {
             label="Download for Chrome"
           />
           <DownloadButton
-            platform="mac"
+            platform="safari"
             downloading={downloading}
             onClick={handleDownload}
-            label="Download for Mac"
+            label="Download for Safari"
           />
         </div>
         <a
@@ -385,7 +372,7 @@ export default function App() {
       <section id="install" className="max-w-5xl mx-auto px-6 py-20">
         <h2 className="text-3xl font-bold text-center mb-4 tracking-tight">Install Ekosee</h2>
         <p className="text-center text-slate-400 mb-12 text-sm">
-          Pick your platform. Chrome loads unpacked; Mac builds a Safari extension with Xcode.
+          Pick your platform. Download Chrome and Safari as separate zips from this site or from downloads/ after a GitHub pull.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -438,7 +425,7 @@ export default function App() {
                 🍎
               </div>
               <div>
-                <div className="font-bold">Mac (Safari)</div>
+                <div className="font-bold">Safari</div>
                 <div className="text-xs text-slate-500">macOS · requires Xcode</div>
               </div>
             </div>
@@ -456,10 +443,10 @@ export default function App() {
               ))}
             </ol>
             <DownloadButton
-              platform="mac"
+              platform="safari"
               downloading={downloading}
               onClick={handleDownload}
-              label="Download for Mac"
+              label="Download for Safari"
             />
           </div>
         </div>
@@ -477,7 +464,7 @@ export default function App() {
           <img src="/ekosee/extension/icons/icon16.png" alt="" className="w-4 h-4 rounded opacity-60" />
           <span className="font-semibold text-slate-500">Ekosee</span>
         </div>
-        <p>No account · No API key · Chrome &amp; Mac Safari</p>
+        <p>No account · No API key · Chrome &amp; Safari packages</p>
       </footer>
     </div>
   );

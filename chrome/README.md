@@ -1,19 +1,22 @@
 # Ekosee for Chrome
 
-Load the unpacked extension from the sibling `extension/` folder.
+Standalone Chrome package. **No API key required.**
+
+## Download (Replit / GitHub)
+
+1. After pulling this repo (or opening it on Replit), download **`downloads/ekosee-chrome.zip`**
+2. Or download / copy this entire **`chrome/`** folder
 
 ## Install
 
-1. Open Chrome and go to `chrome://extensions`
-2. Enable **Developer mode** (top-right)
-3. Click **Load unpacked**
-4. Select the `extension/` folder in this repo (or unzip `ekosee-chrome.zip` and select that folder)
-
-No API key. No account. Translation uses Google Translate from the extension itself.
+1. Unzip `ekosee-chrome.zip` if needed
+2. Open Chrome → `chrome://extensions`
+3. Enable **Developer mode** (top-right)
+4. Click **Load unpacked**
+5. Select this `chrome` folder (the one that contains `manifest.json`)
 
 ## Usage
 
-1. Open any page
-2. Click the camel **Translate** pill (bottom-right)
-3. Pick a language → **Translate**
-4. Tap the restore control on the pill to revert
+Open any page → tap the **Translate** pill (bottom-right) → choose a language.
+
+Powered by Google Translate. No account. No API key.
