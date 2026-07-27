@@ -26,7 +26,7 @@ ekosee/
 │       ├── index.css
 │       └── main.tsx
 └── server/
-    └── routes.ts       # Express routes: POST /ekosee/translate, POST /ekosee/detect
+    └── routes.ts       # Express routes: GET /ekosee/health, POST /ekosee/translate, POST /ekosee/detect
 ```
 
 ## Setup
