@@ -1,6 +1,8 @@
 # Ekosee — Browser Extension
 
-Translate any web page into your language, powered by OpenAI GPT-4o mini.
+Translate any web page with Google Translate. **No API key. No account.**
+
+Works in **Chrome** (any OS) and **Safari on Mac**.
 
 ## Install in Chrome
 
@@ -9,40 +11,39 @@ Translate any web page into your language, powered by OpenAI GPT-4o mini.
 3. Click **Load unpacked**
 4. Select this `extension/` folder
 
+See also `chrome/README.md` in the repo root.
+
 ## Install in Safari (macOS)
 
 Requires Xcode (free from the Mac App Store).
 
-1. Open Terminal and run:
-   ```
-   xcrun safari-web-extension-converter /path/to/extension
-   ```
-2. Xcode opens with a generated project — click **Run** to build and install
-3. In Safari → Settings → Extensions, enable **Ekosee**
-4. Click **Allow on Every Website** when prompted
+```bash
+# from the repo root
+chmod +x mac/convert-for-safari.sh
+./mac/convert-for-safari.sh
+```
+
+Then Run in Xcode, and enable **Ekosee** under Safari → Settings → Extensions.
+
+Full steps: `mac/README.md`.
 
 ## Setup
 
-1. Click the Ekosee icon in your browser toolbar
-2. Click the ⚙ Settings button
-3. Paste your OpenAI API key (get one at platform.openai.com/api-keys)
-4. Click **Test key** to verify, then **Save Settings**
+None. There is no API key to paste. Optionally set a default language in the extension options (toolbar icon → Settings).
 
 ## Usage
 
-1. Open any web page in a foreign language
-2. Click the Ekosee toolbar icon
-3. Select your target language
-4. Click **Translate Page**
-5. Click **Restore Original** to revert
+1. Open any web page
+2. Click the **Translate** pill in the bottom-right corner
+3. Choose a language and tap **Translate**
+4. Tap restore on the pill to revert
 
-## Translation model
+## Translation engine
 
-Ekosee uses `gpt-4o-mini` — fast, accurate, and inexpensive (~$0.001 per typical page).
-Your API key is stored locally in your browser and never sent anywhere except OpenAI.
+Ekosee calls Google Translate’s public web endpoint from the extension background worker. No Ekosee server and no Google Cloud API key are required.
 
 ## Privacy
 
-- Your API key lives in `chrome.storage.sync` (encrypted, browser-managed)
-- Page text is sent directly from your browser to OpenAI — no Ekosee servers involved
-- No analytics, no tracking, no accounts required
+- No account, no analytics
+- Page text is sent to Google Translate to produce translations
+- Default language preference is stored in `chrome.storage.sync` (browser-managed)
