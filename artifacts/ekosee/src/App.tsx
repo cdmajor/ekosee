@@ -120,22 +120,12 @@ export default function App() {
     <div className="min-h-screen" style={{ background: "#060D1B" }}>
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] max-w-6xl mx-auto">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <img
-            src={`${BASE}extension/icons/icon32.png`}
+            src={`${BASE}logo.png`}
             alt="Ekosee"
-            className="w-7 h-7 rounded-md"
+            className="h-8 w-auto"
           />
-          <span
-            className="text-lg font-bold tracking-tight"
-            style={{
-              background: "linear-gradient(135deg,#10B981,#6366F1)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Ekosee
-          </span>
         </div>
         <div className="flex items-center gap-6 text-sm font-medium text-slate-400">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
@@ -407,8 +397,7 @@ export default function App() {
         style={{ borderColor: "rgba(255,255,255,0.06)" }}
       >
         <div className="flex items-center justify-center gap-2 mb-2">
-          <img src={`${BASE}extension/icons/icon16.png`} alt="" className="w-4 h-4 rounded opacity-60" />
-          <span className="font-semibold text-slate-500">Ekosee</span>
+          <img src={`${BASE}logo.png`} alt="Ekosee" className="h-5 w-auto opacity-40" />
         </div>
         <p>No account · No API key · Open WebExtension standard</p>
       </footer>
