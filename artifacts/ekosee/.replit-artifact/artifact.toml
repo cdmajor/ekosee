@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Ekosee"
+version = "1.0.0"
+id = "artifacts/ekosee"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24379
+
+[services.development]
+run = "pnpm --filter @workspace/ekosee run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/ekosee", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/ekosee/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24379"
+BASE_PATH = "/"
