@@ -8,12 +8,23 @@ const BATCH_SIZE = 40;
 // Allow Chrome/Safari extension origins
 function corsHeaders(res: import("express").Response) {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 }
 
 ekoseeRouter.options("/ekosee/translate", (_req, res) => { corsHeaders(res); res.sendStatus(204); });
 ekoseeRouter.options("/ekosee/detect",    (_req, res) => { corsHeaders(res); res.sendStatus(204); });
+ekoseeRouter.options("/ekosee/health",    (_req, res) => { corsHeaders(res); res.sendStatus(204); });
+
+// GET /api/ekosee/health
+ekoseeRouter.get("/ekosee/health", (_req, res) => {
+  corsHeaders(res);
+  res.json({
+    status: "ok",
+    service: "ekosee",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // POST /api/ekosee/translate
 ekoseeRouter.post("/ekosee/translate", async (req, res) => {

@@ -66,10 +66,11 @@ The download button in `App.tsx` fetches the extension files, replaces the `__AP
 
 | Method | Path | Body | Response |
 |--------|------|------|----------|
+| GET | `/api/ekosee/health` | — | `{ status: "ok", service: "ekosee", timestamp: string }` |
 | POST | `/api/ekosee/translate` | `{ texts: string[], targetLanguage: string }` | `{ translations: string[] }` |
 | POST | `/api/ekosee/detect` | `{ sample: string }` | `{ language: string }` |
 
-Both endpoints include `Access-Control-Allow-Origin: *` CORS headers so the extension can call them from any tab.
+All endpoints include `Access-Control-Allow-Origin: *` CORS headers so the extension can call them from any tab. Use `/api/ekosee/health` for liveness checks.
 
 ## Key Design Decisions
 
