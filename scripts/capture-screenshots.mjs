@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Capture 4 Mac + 4 PC product screenshots.
+ * Capture 4 Mac + 4 PC product screenshots on foreign websites.
  *
  * Prerequisites:
  *   python3 -m http.server 8790 --directory screenshots/demo
- *   Chrome/Chromium available as google-chrome-stable (or set CHROME_PATH)
- *   npm install puppeteer-core  (or global)
+ *   Chrome available (CHROME_PATH or google-chrome-stable)
+ *   puppeteer-core installed
  */
 import puppeteer from "puppeteer-core";
 import fs from "fs";
@@ -33,15 +33,16 @@ fs.mkdirSync(path.join(OUT, "mac"), { recursive: true });
 fs.mkdirSync(path.join(OUT, "pc"), { recursive: true });
 fs.mkdirSync(ARTIFACTS, { recursive: true });
 
+// platform, scene key, output filename
 const shots = [
-  ["mac", "landing", "mac-01-landing.png"],
-  ["mac", "install", "mac-02-safari-extensions.png"],
-  ["mac", "picker", "mac-03-language-picker.png"],
-  ["mac", "translated", "mac-04-translated.png"],
-  ["pc", "landing", "pc-01-landing.png"],
-  ["pc", "install", "pc-02-chrome-extensions.png"],
-  ["pc", "picker", "pc-03-language-picker.png"],
-  ["pc", "translated", "pc-04-translated.png"],
+  ["mac", "mac1", "mac-01-lemonde-fr.png"],
+  ["mac", "mac2", "mac-02-asahi-jp.png"],
+  ["mac", "mac3", "mac-03-spiegel-de.png"],
+  ["mac", "mac4", "mac-04-elpais-es.png"],
+  ["pc", "pc1", "pc-01-corriere-it.png"],
+  ["pc", "pc2", "pc-02-folha-pt.png"],
+  ["pc", "pc3", "pc-03-bbc-arabic.png"],
+  ["pc", "pc4", "pc-04-chosun-ko.png"],
 ];
 
 const browser = await puppeteer.launch({

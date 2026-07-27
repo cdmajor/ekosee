@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ekosee demo</title>
+<title>Ekosee demo — foreign sites</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -13,15 +13,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px;
+    padding: 28px;
   }
+  body.pc { background: #1a2332; }
   .desktop {
-    width: 1120px;
+    width: 1180px;
     border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
     background: #0b1220;
   }
+  body.pc .desktop { border-radius: 8px; }
   .menubar {
     height: 28px;
     background: linear-gradient(180deg, #ececec, #d8d8d8);
@@ -36,69 +38,71 @@
   .menubar .apple { font-weight: 700; }
   .menubar .app { font-weight: 600; }
   .titlebar {
-    height: 44px;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 14px;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 14px 12px;
     border-bottom: 1px solid rgba(255,255,255,0.08);
   }
   .titlebar.safari { background: #2a2a2c; }
   .titlebar.chrome { background: #202124; }
-  .traffic { display: flex; gap: 7px; }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .traffic { display: flex; gap: 7px; flex-shrink: 0; }
   .traffic span { width: 11px; height: 11px; border-radius: 50%; display: block; }
   .traffic .r { background: #ff5f57; }
   .traffic .y { background: #febc2e; }
   .traffic .g { background: #28c840; }
+  body.pc .traffic { display: none; }
+  .tabs { display: flex; gap: 6px; flex: 1; min-width: 0; }
+  .tab {
+    background: rgba(255,255,255,0.1);
+    color: #e5e7eb;
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 8px 8px 0 0;
+    max-width: 360px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .win-controls {
     display: none;
     margin-left: auto;
     gap: 2px;
     align-items: center;
+    flex-shrink: 0;
   }
+  body.pc .win-controls { display: flex; }
   .win-controls span {
     width: 46px; height: 32px;
     display: flex; align-items: center; justify-content: center;
     color: #e8eaed; font-size: 12px;
   }
-  body.pc {
-    background: #1a2332;
+  .omnibox {
+    width: 100%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 10px;
+    color: #f8fafc;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
-  body.pc .desktop { border-radius: 8px; }
-  body.pc .traffic { display: none; }
-  body.pc .win-controls { display: flex; }
-  body.pc .titlebar {
-    height: 48px;
-    flex-wrap: wrap;
-    padding-top: 6px;
-    align-content: center;
-  }
-  body.pc .tabs { order: 1; width: 100%; }
-  body.pc .omnibox { order: 2; max-width: 720px; }
-  .tabs { display: flex; gap: 6px; flex: 1; min-width: 0; }
-  .tab {
-    background: rgba(255,255,255,0.08);
-    color: #e5e7eb;
-    font-size: 12px;
-    padding: 6px 12px;
-    border-radius: 8px 8px 0 0;
-    max-width: 220px;
+  .omnibox .lock { opacity: 0.85; font-size: 14px; }
+  .omnibox #url {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .omnibox {
-    flex: 1;
-    background: rgba(255,255,255,0.08);
-    border-radius: 999px;
-    color: #cbd5e1;
-    font-size: 12px;
-    padding: 7px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .omnibox .lock { opacity: 0.7; }
   .content {
     position: relative;
     background: #f8fafc;
@@ -106,9 +110,9 @@
     color: #0f172a;
   }
   .article {
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto;
-    padding: 48px 40px 120px;
+    padding: 44px 40px 130px;
   }
   .kicker {
     color: #b45309;
@@ -119,76 +123,14 @@
     margin-bottom: 12px;
   }
   h1 {
-    font-size: 40px;
-    line-height: 1.15;
+    font-size: 36px;
+    line-height: 1.18;
     letter-spacing: -0.03em;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
-  .meta { color: #64748b; font-size: 14px; margin-bottom: 28px; }
-  p { font-size: 18px; line-height: 1.65; color: #334155; margin-bottom: 18px; }
-  .landing {
-    background: #060D1B;
-    color: #fff;
-    min-height: 640px;
-    padding: 40px 56px 56px;
-  }
-  .landing-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 72px;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 800;
-    font-size: 18px;
-    background: linear-gradient(135deg,#10B981,#6366F1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .brand-mark {
-    width: 28px; height: 28px; border-radius: 7px;
-    background: linear-gradient(135deg,#C19A6B,#8B6914);
-    -webkit-text-fill-color: initial;
-  }
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid rgba(16,185,129,0.25);
-    background: rgba(16,185,129,0.08);
-    color: #10B981;
-    border-radius: 999px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 22px;
-  }
-  .landing h1 {
-    font-size: 52px;
-    color: #fff;
-    max-width: 760px;
-  }
-  .landing .sub {
-    color: #94a3b8;
-    font-size: 18px;
-    max-width: 520px;
-    margin: 18px 0 28px;
-    line-height: 1.6;
-  }
-  .cta-row { display: flex; gap: 12px; }
-  .cta {
-    border: none;
-    border-radius: 12px;
-    padding: 14px 22px;
-    font-weight: 800;
-    color: #fff;
-    font-size: 15px;
-  }
-  .cta.green { background: linear-gradient(135deg,#10B981,#059669); }
-  .cta.gray { background: linear-gradient(135deg,#64748B,#334155); }
+  .meta { color: #64748b; font-size: 14px; margin-bottom: 26px; }
+  p { font-size: 18px; line-height: 1.65; color: #334155; margin-bottom: 16px; }
+  .rtl { direction: rtl; text-align: right; }
   .pill {
     position: absolute;
     right: 28px;
@@ -205,6 +147,7 @@
     gap: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.28);
     border: none;
+    font-family: inherit;
   }
   .pill.translated {
     background: #7B8F6A;
@@ -256,70 +199,10 @@
     padding: 10px;
     font-size: 13px;
   }
-  .chrome-extensions {
-    background: #202124;
-    color: #e8eaed;
-    min-height: 640px;
-    padding: 28px 36px;
-  }
-  .chrome-extensions h2 { font-size: 22px; margin-bottom: 8px; }
-  .chrome-extensions .hint { color: #9aa0a6; margin-bottom: 22px; font-size: 14px; }
-  .ext-card {
-    background: #292a2d;
-    border-radius: 12px;
-    padding: 18px 20px;
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    max-width: 640px;
-  }
-  .ext-icon {
-    width: 48px; height: 48px; border-radius: 10px;
-    background: linear-gradient(135deg,#C19A6B,#8B6914);
-  }
-  .ext-card h3 { font-size: 16px; margin-bottom: 4px; }
-  .ext-card p { color: #9aa0a6; font-size: 13px; margin: 0; }
-  .toggle {
-    margin-left: auto;
-    width: 40px; height: 22px; border-radius: 999px;
-    background: #10B981; position: relative;
-  }
-  .toggle::after {
-    content: "";
-    position: absolute; right: 3px; top: 3px;
-    width: 16px; height: 16px; border-radius: 50%; background: #fff;
-  }
-  .safari-prefs {
-    background: #1c1c1e;
-    color: #f5f5f7;
-    min-height: 640px;
-    display: grid;
-    grid-template-columns: 220px 1fr;
-  }
-  .sidebar {
-    background: #2c2c2e;
-    padding: 24px 16px;
-    border-right: 1px solid rgba(255,255,255,0.08);
-  }
-  .sidebar .item {
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    color: #a1a1a6;
-    margin-bottom: 4px;
-  }
-  .sidebar .item.active { background: #0a84ff; color: #fff; font-weight: 600; }
-  .prefs-main { padding: 28px 32px; }
-  .prefs-main h2 { font-size: 22px; margin-bottom: 18px; }
-  .ext-row {
-    display: flex; align-items: center; gap: 14px;
-    background: #2c2c2e; border-radius: 12px; padding: 16px;
-    max-width: 560px;
-  }
   .label-tag {
     position: absolute;
     left: 20px; top: 20px;
-    background: rgba(15,23,42,0.85);
+    background: rgba(15,23,42,0.88);
     color: #fff;
     font-size: 11px;
     font-weight: 700;
@@ -327,6 +210,7 @@
     text-transform: uppercase;
     padding: 6px 10px;
     border-radius: 999px;
+    z-index: 2;
   }
 </style>
 </head>
@@ -338,17 +222,19 @@
       <span>File</span><span>Edit</span><span>View</span><span>History</span><span>Bookmarks</span><span>Develop</span><span>Window</span><span>Help</span>
     </div>
     <div class="titlebar" id="titlebar">
-      <div class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div>
-      <div class="tabs" id="tabs"></div>
+      <div class="row">
+        <div class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        <div class="tabs" id="tabs"></div>
+        <div class="win-controls" aria-hidden="true"><span>─</span><span>□</span><span>×</span></div>
+      </div>
       <div class="omnibox" id="omnibox"><span class="lock">🔒</span><span id="url"></span></div>
-      <div class="win-controls" aria-hidden="true"><span>─</span><span>□</span><span>×</span></div>
     </div>
     <div class="content" id="content"></div>
   </div>
 <script>
   const params = new URLSearchParams(location.search);
   const platform = params.get("platform") || "mac"; // mac | pc
-  const scene = params.get("scene") || "landing";
+  const scene = params.get("scene") || "mac1";
 
   const menubar = document.getElementById("menubar");
   const titlebar = document.getElementById("titlebar");
@@ -368,105 +254,177 @@
     titlebar.classList.remove("safari");
   }
 
-  const scenes = {
-    landing: {
-      url: platform === "mac" ? "ekosee.app/#install" : "ekosee.app",
-      tab: "Ekosee — Translate any page",
-      html: `
-        <div class="landing">
-          <div class="landing-nav">
-            <div class="brand"><div class="brand-mark"></div>Ekosee</div>
-            <div style="color:#94a3b8;font-size:14px;font-weight:600">Features · Install</div>
-          </div>
-          <div class="badge"><span style="width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block"></span>
-            Chrome · Mac Safari · Google Translate · No API Key
-          </div>
-          <h1>Read any page in your language</h1>
-          <p class="sub">Ekosee translates entire web pages with one click using Google Translate — no account or API key required.</p>
-          <div class="cta-row">
-            <button class="cta green">${platform === "mac" ? "Download for Mac" : "Download for Chrome"}</button>
-            <button class="cta gray">${platform === "mac" ? "Download for Chrome" : "Download for Mac"}</button>
-          </div>
-        </div>`
-    },
-    install: {
-      url: platform === "mac" ? "safari-settings://extensions" : "chrome://extensions",
-      tab: platform === "mac" ? "Safari Settings — Extensions" : "Extensions",
-      html: platform === "mac" ? `
-        <div class="safari-prefs">
-          <div class="sidebar">
-            <div class="item">General</div>
-            <div class="item">Tabs</div>
-            <div class="item">AutoFill</div>
-            <div class="item active">Extensions</div>
-            <div class="item">Privacy</div>
-          </div>
-          <div class="prefs-main">
-            <h2>Extensions</h2>
-            <div class="ext-row">
-              <div class="ext-icon"></div>
-              <div>
-                <h3 style="margin:0 0 4px;font-size:16px">Ekosee</h3>
-                <p style="margin:0;color:#a1a1a6;font-size:13px">Translate any web page · Google Translate · No API key</p>
-              </div>
-              <div class="toggle"></div>
-            </div>
-            <p style="margin-top:16px;color:#a1a1a6;font-size:13px">Allow on every website · Checked</p>
-          </div>
-        </div>` : `
-        <div class="chrome-extensions">
-          <h2>Extensions</h2>
-          <p class="hint">Developer mode on · Load unpacked → ekosee-chrome/extension</p>
-          <div class="ext-card">
-            <div class="ext-icon"></div>
-            <div>
-              <h3>Ekosee</h3>
-              <p>Translate any web page with Google Translate — one tap, no account or API key.</p>
-              <p style="margin-top:6px">ID: ekosee · Version 1.0.0</p>
-            </div>
-            <div class="toggle"></div>
-          </div>
-        </div>`
-    },
-    picker: {
-      url: "lemonde.fr/international",
-      tab: "International — Le Monde",
-      html: `
-        <div class="label-tag">${platform === "mac" ? "Mac · Safari" : "PC · Chrome"}</div>
-        <div class="article">
-          <div class="kicker">International</div>
-          <h1>Les dirigeants européens se réunissent à Bruxelles</h1>
-          <div class="meta">Le Monde · Il y a 2 heures</div>
-          <p>Les chefs d'État et de gouvernement de l'Union européenne se retrouvent ce jeudi pour discuter de la sécurité et de l'énergie.</p>
-          <p>Plusieurs capitales espèrent un accord sur de nouvelles mesures de soutien, tandis que d'autres appellent à la prudence budgétaire.</p>
-          <p>À Bruxelles, les négociations devraient se prolonger jusqu'à la nuit.</p>
-        </div>
+  const platformTag = platform === "mac" ? "Mac · Safari" : "PC · Chrome";
+
+  function page({ url, tab, kicker, title, meta, paragraphs, mode, lang, rtl }) {
+    const bodyClass = rtl ? "article rtl" : "article";
+    const paras = paragraphs.map((t) => `<p>${t}</p>`).join("");
+    let chromeUI = `<button class="pill"><span>🌐</span><span>Translate</span></button>`;
+    if (mode === "picker") {
+      chromeUI = `
         <div class="panel">
           <div class="panel-head"><span>Translate page</span><span style="opacity:.5">✕</span></div>
           <div class="panel-label">Translate to</div>
-          <div class="select">English ▾</div>
+          <div class="select">${lang || "English"} ▾</div>
           <button class="translate-btn">Translate</button>
         </div>
-        <button class="pill"><span>🌐</span><span>Translate</span></button>`
-    },
-    translated: {
-      url: "lemonde.fr/international",
-      tab: "International — Le Monde",
-      html: `
-        <div class="label-tag">${platform === "mac" ? "Mac · Safari" : "PC · Chrome"}</div>
-        <div class="article">
-          <div class="kicker">International</div>
-          <h1>European leaders meet in Brussels</h1>
-          <div class="meta">Le Monde · 2 hours ago</div>
-          <p>The heads of state and government of the European Union are meeting this Thursday to discuss security and energy.</p>
-          <p>Several capitals hope for an agreement on new support measures, while others call for fiscal caution.</p>
-          <p>In Brussels, negotiations are expected to continue into the night.</p>
-        </div>
-        <button class="pill translated"><span>✓ English</span><span class="restore">↺</span></button>`
+        <button class="pill"><span>🌐</span><span>Translate</span></button>`;
+    } else if (mode === "translated") {
+      chromeUI = `<button class="pill translated"><span>✓ ${lang || "English"}</span><span class="restore">↺</span></button>`;
     }
+    return {
+      url,
+      tab,
+      html: `
+        <div class="label-tag">${platformTag}</div>
+        <div class="${bodyClass}">
+          <div class="kicker">${kicker}</div>
+          <h1>${title}</h1>
+          <div class="meta">${meta}</div>
+          ${paras}
+        </div>
+        ${chromeUI}`
+    };
+  }
+
+  // Mac: 4 foreign sites  |  PC: 4 different foreign sites
+  const scenes = {
+    // Mac 1 — French news, pill ready
+    mac1: page({
+      url: "https://www.lemonde.fr/international/article/sommet-europeen-bruxelles",
+      tab: "Les dirigeants européens — Le Monde",
+      kicker: "International",
+      title: "Les dirigeants européens se réunissent à Bruxelles",
+      meta: "Le Monde · Il y a 2 heures · lemonde.fr",
+      paragraphs: [
+        "Les chefs d'État et de gouvernement de l'Union européenne se retrouvent ce jeudi pour discuter de la sécurité et de l'énergie.",
+        "Plusieurs capitales espèrent un accord sur de nouvelles mesures de soutien, tandis que d'autres appellent à la prudence budgétaire.",
+        "À Bruxelles, les négociations devraient se prolonger jusqu'à la nuit."
+      ],
+      mode: "pill"
+    }),
+    // Mac 2 — Japanese news, picker open
+    mac2: page({
+      url: "https://www.asahi.com/articles/economy-summit-tokyo-2026.html",
+      tab: "経済サミット — 朝日新聞",
+      kicker: "経済",
+      title: "東京で経済サミットが開幕、各国首脳が協力を確認",
+      meta: "朝日新聞 · 3時間前 · asahi.com",
+      paragraphs: [
+        "世界各国の首都東京で経済サミットが始まり、貿易とエネルギー安全保障について議論が行われた。",
+        "参加国はサプライチェーンの強化と気候変動対策で連携する方針を示した。",
+        "閉幕は週末の予定で、共同声明の取りまとめが焦点となっている。"
+      ],
+      mode: "picker",
+      lang: "English"
+    }),
+    // Mac 3 — German news, language picker
+    mac3: page({
+      url: "https://www.spiegel.de/politik/deutschland/bundestag-energiegesetz.html",
+      tab: "Bundestag beschließt Energiegesetz — DER SPIEGEL",
+      kicker: "Politik",
+      title: "Bundestag beschließt neues Energiegesetz nach langer Debatte",
+      meta: "DER SPIEGEL · vor 4 Stunden · spiegel.de",
+      paragraphs: [
+        "Nach stundenlanger Aussprache hat der Bundestag ein umfassendes Energiegesetz verabschiedet.",
+        "Opposition kritisierte fehlende Entlastungen für Haushalte, die Koalition verwies auf Klimaziele.",
+        "Das Gesetz soll bereits zum kommenden Quartal in Kraft treten."
+      ],
+      mode: "picker",
+      lang: "English"
+    }),
+    // Mac 4 — Spanish news, translated to English
+    mac4: page({
+      url: "https://elpais.com/internacional/cumbre-clima-madrid.html",
+      tab: "Climate summit — El País",
+      kicker: "Internacional",
+      title: "World leaders reach a climate agreement in Madrid",
+      meta: "El País · 1 hour ago · elpais.com",
+      paragraphs: [
+        "Delegations from more than 100 countries signed a framework to cut emissions over the next decade.",
+        "Negotiators highlighted funding for developing nations and new targets for renewable energy.",
+        "Protests continued outside the venue as talks entered their final hours."
+      ],
+      mode: "translated",
+      lang: "English"
+    }),
+
+    // PC 1 — Italian news, pill
+    pc1: page({
+      url: "https://www.corriere.it/esteri/vertice-ue-roma.shtml",
+      tab: "Vertice UE a Roma — Corriere della Sera",
+      kicker: "Esteri",
+      title: "Vertice europeo a Roma: al centro sicurezza e migrazione",
+      meta: "Corriere della Sera · 2 ore fa · corriere.it",
+      paragraphs: [
+        "I leader dell'Unione europea si sono riuniti a Roma per discutere di sicurezza comune e flussi migratori.",
+        "Sul tavolo anche le nuove regole energetiche e il sostegno all'industria continentale.",
+        "Le trattative potrebbero protrarsi fino a tarda sera."
+      ],
+      mode: "pill"
+    }),
+    // PC 2 — Portuguese (Brazil), picker
+    pc2: page({
+      url: "https://www1.folha.uol.com.br/mundo/cupula-amazonia-brasilia.shtml",
+      tab: "Cúpula da Amazônia — Folha de S.Paulo",
+      kicker: "Mundo",
+      title: "Cúpula em Brasília discute proteção da Amazônia e financiamento verde",
+      meta: "Folha de S.Paulo · há 5 horas · folha.uol.com.br",
+      paragraphs: [
+        "Representantes de vários países se reuniram em Brasília para negociar metas de conservação florestal.",
+        "O encontro busca acordos sobre financiamento climático e combate ao desmatamento ilegal.",
+        "Ativistas pediram prazos mais ambiciosos e fiscalização mais rígida."
+      ],
+      mode: "picker",
+      lang: "English"
+    }),
+    // PC 3 — Arabic news, picker (RTL)
+    pc3: page({
+      url: "https://www.bbc.com/arabic/articles/middle-east-summit-cairo",
+      tab: "قمة الشرق الأوسط — BBC News عربي",
+      kicker: "الشرق الأوسط",
+      title: "قادة المنطقة يجتمعون في القاهرة لبحث السلام والاقتصاد",
+      meta: "BBC News عربي · منذ ساعتين · bbc.com/arabic",
+      paragraphs: [
+        "انطلقت أعمال القمة في القاهرة بمشاركة وفود من عدة دول لمناقشة ملفات السلام والاستقرار.",
+        "وتشمل أجندة الاجتماع التعاون الاقتصادي ومشاريع الطاقة الإقليمية.",
+        "ومن المتوقع أن تصدر بياناً مشتركاً بنهاية اليوم."
+      ],
+      mode: "picker",
+      lang: "English",
+      rtl: true
+    }),
+    // PC 4 — Korean news, translated
+    pc4: page({
+      url: "https://www.chosun.com/international/asia/seoul-summit-2026/",
+      tab: "Seoul summit — The Chosun Ilbo",
+      kicker: "국제",
+      title: "Asian leaders agree on technology partnership in Seoul",
+      meta: "The Chosun Ilbo · 3 hours ago · chosun.com",
+      paragraphs: [
+        "Officials from across the region announced a joint plan for semiconductor supply chains and AI research.",
+        "The summit also covered climate resilience and youth exchange programs.",
+        "A final communiqué is expected tomorrow morning."
+      ],
+      mode: "translated",
+      lang: "English"
+    }),
   };
 
-  const s = scenes[scene] || scenes.landing;
+  // Map legacy/generic scene names used by capture script
+  const alias = {
+    landing: platform === "mac" ? "mac1" : "pc1",
+    install: platform === "mac" ? "mac2" : "pc2",
+    picker: platform === "mac" ? "mac3" : "pc3",
+    translated: platform === "mac" ? "mac4" : "pc4",
+    "1": platform === "mac" ? "mac1" : "pc1",
+    "2": platform === "mac" ? "mac2" : "pc2",
+    "3": platform === "mac" ? "mac3" : "pc3",
+    "4": platform === "mac" ? "mac4" : "pc4",
+  };
+
+  const key = scenes[scene] ? scene : (alias[scene] || (platform === "mac" ? "mac1" : "pc1"));
+  const s = scenes[key];
   urlEl.textContent = s.url;
   tabs.innerHTML = `<div class="tab">${s.tab}</div>`;
   content.innerHTML = s.html;
